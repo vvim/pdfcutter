@@ -49,27 +49,28 @@ void MainWindow::on_choosePDFFile_clicked()
 void MainWindow::on_addPageRangeButton_clicked()
 {
     PagesToCutDialog *pagestocut = new PagesToCutDialog();
-    pagestocut->exec();
-
-    QMessageBox msgBox;
-    QString van;
-    van = van.setNum(pagestocut->getCutFrom());
-    QString tot;
-    tot = tot.setNum(pagestocut->getCutTo());
-    msgBox.setText("Knippen van "+van+" tot en met "+tot);
-    msgBox.exec();
-
-
-    /*
-    // <vvim> controleren of getallen niet >> aantal pagina's van PDF ! </vvim>
-    if ((cutTo > MaximumPaginas) || (cutFrom > MaximumPaginas))
+    if (pagestocut->exec())
     {
+        // exec() is accepted, no click on the CANCEL button
+        // if exec() is accepted, than the "CutFrom" and "CutTo" will also be > -1, so we do not have to check for that
+        // if exec() is accepted, than the "CutFrom" and "CutTo" will also be within the acceptable page range, so we do not have to check for that
+        QString van;
+        van = van.setNum(pagestocut->getCutFrom());
+        QString tot;
+        tot = tot.setNum(pagestocut->getCutTo());
+
+        /*
+        // <vvim> controleren of getallen niet >> aantal pagina's van PDF ! </vvim>
+        if ((cutTo > MaximumPaginas) || (cutFrom > MaximumPaginas))
+        {
+        }
+        */
+
+
+        //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
+        new QListWidgetItem("bereik "+van+" - "+tot, ui->cuttingListWidget);
     }
-    */
 
-
-    //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
-    new QListWidgetItem(tr("Hazel"), ui->cuttingListWidget);
 }
 
 void MainWindow::on_cuttingListWidget_itemClicked(QListWidgetItem *item)
