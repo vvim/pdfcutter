@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QListWidgetItem>
+#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -82,24 +83,70 @@ void MainWindow::on_addPageRangeButton_clicked()
 
         //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
         new QListWidgetItem("bereik "+van+" - "+tot, ui->cuttingListWidget);
+
+       // ui->cuttingListWidget->addItem( new QListWidgetItem("hazel"));
+
     }
 
 }
 
 void MainWindow::on_cuttingListWidget_itemClicked(QListWidgetItem *item)
 {
-    // item selected
+    // item selected,removal has to be possible
     ui->removePageRangeButton->setEnabled(true);
-    QMessageBox msgBox;
-    msgBox.setText(item->text()+" clicked!");
-    msgBox.exec();
 }
 
 void MainWindow::on_startCuttingProcessButton_clicked()
 {
-    QProcess *proc = new QProcess();
-    QString program = "/usr/bin/evince";
-    QStringList arguments;
-    arguments << ui->PDFFileNameLabel->text();
-    proc->execute(program, arguments);
+    if(ui->cuttingListWidget->count() == 0)
+    {
+        // geen bereik ingegeven, dus waarom in hoofdstukken verknippen?
+        QMessageBox msgbox;
+        msgbox.setText(tr("Er zijn geen bereiken ingegeven, dus hoe kan ik het PDF bestand dan in hoofdstukken verknippen?"));
+        msgbox.setInformativeText(tr("Klik op de knop \"Bereik toevoegen\" om hoofdstukken te definiëren."));
+        msgbox.exec();
+    }
+    else
+    {
+        /*
+                //if (ui->cuttingListWidget->size().height())
+        QProcess *proc = new QProcess();
+        QString program = "/usr/bin/evince";
+        QStringList arguments;
+        arguments << ui->PDFFileNameLabel->text();
+        proc->execute(program, arguments);
+        */
+    }
+}
+
+void MainWindow::on_removePageRangeButton_clicked()
+{
+    qDeleteAll(ui->cuttingListWidget->selectedItems()); // see http://lists.trolltech.com/qt-interest/2007-09/thread00253-0.html
+    ui->cuttingListWidget->clearSelection(); // don't show any selection (normally the selection shifts, I want it gone
+    ui->removePageRangeButton->setDisabled(true);
+}
+
+void MainWindow::on_deleteAllPageRangeButton_clicked()
+{
+    QMessageBox msgBox;
+
+    msgBox.setText(tr("Verwijder alle bereiken."));
+    msgBox.setInformativeText(tr("Ben je zeker dat je de hele lijst wilt wissen?"));
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::YesAll);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::YesAll)
+    {
+        ui->cuttingListWidget->clear();
+        ui->removePageRangeButton->setDisabled(true);
+    }
+}
+
+void MainWindow::keyPressEvent( QKeyEvent *k )
+{
+    if(k->matches(QKeySequence::Delete))
+        on_removePageRangeButton_clicked();
+    else if(k->matches(QKeySequence::Open))
+        on_choosePDFFile_clicked();
 }

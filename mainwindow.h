@@ -26,6 +26,12 @@ private slots:
 
     void on_startCuttingProcessButton_clicked();
 
+    void on_removePageRangeButton_clicked();
+
+    void on_deleteAllPageRangeButton_clicked();
+
+    void keyPressEvent( QKeyEvent *k );
+
 private:
     Ui::MainWindow *ui;
 };
