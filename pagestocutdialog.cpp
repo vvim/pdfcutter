@@ -7,6 +7,7 @@ PagesToCutDialog::PagesToCutDialog(QWidget *parent) :
     ui(new Ui::PagesToCutDialog)
 {
     ui->setupUi(this);
+    inputValidated = false;
 }
 
 PagesToCutDialog::~PagesToCutDialog()
@@ -34,4 +35,20 @@ void PagesToCutDialog::on_buttonBox_clicked(QAbstractButton *button)
     }
     */
 
+}
+
+int PagesToCutDialog::getCutFrom()
+{
+    if (inputValidated)
+            return ui->CutFromSpinBox->value();
+    else
+        return -1;
+}
+
+int PagesToCutDialog::getCutTo()
+{
+    if (inputValidated)
+        return ui->CutToSpinBox->value();
+    else
+        return -1;
 }

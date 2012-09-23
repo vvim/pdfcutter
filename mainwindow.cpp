@@ -4,6 +4,8 @@
 #include "ui_pagestocutdialog.h"
 #include <QFileDialog>
 #include <QLabel>
+#include <QMessageBox>
+#include <QListWidgetItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,5 +48,24 @@ void MainWindow::on_choosePDFFile_clicked()
 void MainWindow::on_addCutButton_clicked()
 {
     PagesToCutDialog *pagestocut = new PagesToCutDialog();
-    pagestocut->show();
+    pagestocut->exec();
+
+    QMessageBox msgBox;
+    QString van;
+    van = van.setNum(pagestocut->getCutFrom());
+    QString tot;
+    tot = tot.setNum(pagestocut->getCutTo());
+    msgBox.setText("Knippen van "+van+" tot en met "+tot);
+    msgBox.exec();
+
+
+    /*
+    // <vvim> controleren of getallen niet >> aantal pagina's van PDF ! </vvim>
+    if ((cutTo > MaximumPaginas) || (cutFrom > MaximumPaginas))
+    {
+    }
+    */
+
+
+    new QListWidgetItem(tr("Hazel"), ui->cuttingListWidget);
 }

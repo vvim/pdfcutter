@@ -15,12 +15,15 @@ class PagesToCutDialog : public QDialog
 public:
     explicit PagesToCutDialog(QWidget *parent = 0);
     ~PagesToCutDialog();
+    int getCutFrom();
+    int getCutTo();
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
     Ui::PagesToCutDialog *ui;
+    bool inputValidated;
 };
 
 #endif // PAGESTOCUTDIALOG_H
