@@ -24,6 +24,8 @@ private slots:
 
     void on_cuttingListWidget_itemClicked(QListWidgetItem *item);
 
+    void on_startCuttingProcessButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -3,6 +3,7 @@
 #include "pagestocutdialog.h"
 #include "ui_pagestocutdialog.h"
 #include <QFileDialog>
+#include <QProcess>
 #include <QLabel>
 #include <QMessageBox>
 #include <QListWidgetItem>
@@ -12,6 +13,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->addPageRangeButton->setDisabled(true);
+    ui->startCuttingProcessButton->setDisabled(true);
+    ui->deleteAllPageRangeButton->setDisabled(true);
+    ui->cuttingListLabel->setDisabled(true);
+    ui->cuttingListWidget->setDisabled(true);
+
     ui->removePageRangeButton->setDisabled(true);
 }
 
@@ -39,6 +46,12 @@ void MainWindow::on_choosePDFFile_clicked()
     if(fileName != NULL)
     {
         ui->PDFFileNameLabel->setText(fileName);
+        // now we can also enable the functionality of the addPageRangeButton and the startCuttingProcessButton (without a PDF file, they are useless)
+        ui->addPageRangeButton->setEnabled(true);
+        ui->startCuttingProcessButton->setEnabled(true);
+        ui->deleteAllPageRangeButton->setEnabled(true);
+        ui->cuttingListLabel->setEnabled(true);
+        ui->cuttingListWidget->setEnabled(true);
     }
     else
     {
@@ -80,4 +93,13 @@ void MainWindow::on_cuttingListWidget_itemClicked(QListWidgetItem *item)
     QMessageBox msgBox;
     msgBox.setText(item->text()+" clicked!");
     msgBox.exec();
+}
+
+void MainWindow::on_startCuttingProcessButton_clicked()
+{
+    QProcess *proc = new QProcess();
+    QString program = "/usr/bin/evince";
+    QStringList arguments;
+    arguments << ui->PDFFileNameLabel->text();
+    proc->execute(program, arguments);
 }
