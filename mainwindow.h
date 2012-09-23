@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 
 namespace Ui {
     class MainWindow;
@@ -19,7 +20,9 @@ public:
 private slots:
     void on_choosePDFFile_clicked();
 
-    void on_addCutButton_clicked();
+    void on_addPageRangeButton_clicked();
+
+    void on_cuttingListWidget_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;

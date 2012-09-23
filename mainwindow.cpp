@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->removePageRangeButton->setDisabled(true);
 }
 
 MainWindow::~MainWindow()
@@ -45,7 +46,7 @@ void MainWindow::on_choosePDFFile_clicked()
     }
 }
 
-void MainWindow::on_addCutButton_clicked()
+void MainWindow::on_addPageRangeButton_clicked()
 {
     PagesToCutDialog *pagestocut = new PagesToCutDialog();
     pagestocut->exec();
@@ -67,5 +68,15 @@ void MainWindow::on_addCutButton_clicked()
     */
 
 
+    //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
     new QListWidgetItem(tr("Hazel"), ui->cuttingListWidget);
+}
+
+void MainWindow::on_cuttingListWidget_itemClicked(QListWidgetItem *item)
+{
+    // item selected
+    ui->removePageRangeButton->setEnabled(true);
+    QMessageBox msgBox;
+    msgBox.setText(item->text()+" clicked!");
+    msgBox.exec();
 }

@@ -6,57 +6,103 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>436</width>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="formLayoutWidget">
+   <widget class="QToolButton" name="removePageRangeButton">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>9</y>
-      <width>381</width>
-      <height>231</height>
+      <x>280</x>
+      <y>110</y>
+      <width>121</width>
+      <height>23</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="PDFFileNameLabel">
-       <property name="text">
-        <string>Naam van de PDF</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QToolButton" name="choosePDFFile">
-       <property name="text">
-        <string>Kies PDF</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QListWidget" name="cuttingListWidget"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QToolButton" name="addCutButton">
-       <property name="text">
-        <string>Pagina's knippen</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Bereik verwijderen</string>
+    </property>
    </widget>
+   <widget class="QToolButton" name="choosePDFFile">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>67</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Kies PDF</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="addPageRangeButton">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>80</y>
+      <width>120</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Bereik toevoegen</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="PDFFileNameLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>481</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Naam van de PDF</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="cuttingListWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>131</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start het knippen</string>
+    </property>
+   </widget>
+   <zorder>removePageRangeButton</zorder>
+   <zorder>choosePDFFile</zorder>
+   <zorder>addPageRangeButton</zorder>
+   <zorder>cuttingListWidget</zorder>
+   <zorder>PDFFileNameLabel</zorder>
+   <zorder>cuttingListWidget</zorder>
+   <zorder>pushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>436</width>
      <height>21</height>
     </rect>
    </property>
