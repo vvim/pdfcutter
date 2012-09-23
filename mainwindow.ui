@@ -115,18 +115,17 @@
      <string>Paginabereik:</string>
     </property>
    </widget>
-   <zorder>removePageRangeButton</zorder>
-   <zorder>choosePDFFile</zorder>
-   <zorder>addPageRangeButton</zorder>
-   <zorder>cuttingListWidget</zorder>
-   <zorder>PDFFileNameLabel</zorder>
-   <zorder>cuttingListWidget</zorder>
-   <zorder>startCuttingProcessButton</zorder>
-   <zorder>deleteAllPageRangeButton</zorder>
-   <zorder>cuttingListLabel</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>choosePDFFile</tabstop>
+  <tabstop>addPageRangeButton</tabstop>
+  <tabstop>cuttingListWidget</tabstop>
+  <tabstop>removePageRangeButton</tabstop>
+  <tabstop>deleteAllPageRangeButton</tabstop>
+  <tabstop>startCuttingProcessButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

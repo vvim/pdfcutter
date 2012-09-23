@@ -9,6 +9,9 @@
 #include <QListWidgetItem>
 #include <QKeyEvent>
 
+#define LIST_ITEM_DATA_FROM 0
+#define LIST_ITEM_DATA_TO 1
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -54,10 +57,14 @@ void MainWindow::on_choosePDFFile_clicked()
         ui->cuttingListLabel->setEnabled(true);
         ui->cuttingListWidget->setEnabled(true);
     }
+/*
+    DO NOT put an "else". Imagine the scenario that the user has selected a PDF file to cut, than accidentally presses "Open File" again and presses "CANCEL" to correct his error.
+
     else
     {
         ui->PDFFileNameLabel->setText(tr("...geen PDF gekozen"));
     }
+*/
 }
 
 void MainWindow::on_addPageRangeButton_clicked()
@@ -82,10 +89,16 @@ void MainWindow::on_addPageRangeButton_clicked()
 
 
         //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
-        new QListWidgetItem("bereik "+van+" - "+tot, ui->cuttingListWidget);
+//        new QListWidgetItem("A"+van+"-"+tot, ui->cuttingListWidget); // <vvim> quick&dirty PDFTK-hack, maak onderscheid tussen ->text() en ->data()
+        //new QListWidgetItem("bereik "+van+" - "+tot, ui->cuttingListWidget);
 
-       // ui->cuttingListWidget->addItem( new QListWidgetItem("hazel"));
-
+        QListWidgetItem *newrange = new QListWidgetItem();
+        newrange->setData( LIST_ITEM_DATA_FROM ,van);
+        newrange->setData( LIST_ITEM_DATA_TO   ,tot);
+//        newrange->setText(tr("van pagina ")+van+tr(" tot en met ")+tot);
+        newrange->setText("A"+van+"-"+tot);
+        ui->cuttingListWidget->addItem(newrange);
+        ui->cuttingListWidget->sortItems(); // sorteren? Kan misschien problemen geven met 1, 10, 100...
     }
 
 }
@@ -108,14 +121,34 @@ void MainWindow::on_startCuttingProcessButton_clicked()
     }
     else
     {
-        /*
-                //if (ui->cuttingListWidget->size().height())
-        QProcess *proc = new QProcess();
-        QString program = "/usr/bin/evince";
-        QStringList arguments;
-        arguments << ui->PDFFileNameLabel->text();
-        proc->execute(program, arguments);
-        */
+        int teller = 1000; // <vvim> quick & dirty to avoid trouble with 1, 10, 100, ...
+
+        while(ui->cuttingListWidget->count()>0)
+        {
+            // voor elk item in de lijst, doe: pdftk A=LABEL cat ITEM output hoofdstuk-TELLER.pdf
+
+            QListWidgetItem *temporary_item = ui->cuttingListWidget->takeItem(0);  // takeItem REMOVES and RETURNS, so no extra DELETE needed: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qlistwidget.html#takeItem
+//            QString pageranges = "A" + temporary_item->data( LIST_ITEM_DATA_FROM ).toString() + "-" + temporary_item->data( LIST_ITEM_DATA_TO ).toString();
+            QString pageranges = temporary_item->text();
+            ///////
+            QString t; t = t.setNum(teller);
+
+            QProcess *proc = new QProcess();
+            QString program = "pdftk";
+
+            QStringList arguments;
+            arguments << "A="+ui->PDFFileNameLabel->text(); // escaping not necessary, QProcess does that
+            arguments << "cat" << pageranges << "output" << ui->PDFFileNameLabel->text()+tr("hoofdstuk-")+t+".pdf";
+
+            proc->execute(program, arguments);
+
+            teller++;
+        }
+        QString t; t = t.setNum(teller-1000);
+        QMessageBox msgbox;
+        msgbox.setText(tr("Klaar, ")+t+tr(" hoofdstukken aantemaakt."));
+        msgbox.exec();
+
     }
 }
 

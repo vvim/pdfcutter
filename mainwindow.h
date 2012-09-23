@@ -37,3 +37,7 @@ private:
 };
 
 #endif // MAINWINDOW_H
+
+
+// <vvim>: internationalizeren:     tr( "Cannot open %1" ).arg( fileName ) , http://doc.qt.digia.com/qq/qq03-swedish-chef.html
+// <vvim>: en wat met Designer???
