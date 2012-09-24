@@ -9,8 +9,8 @@
 #include <QListWidgetItem>
 #include <QKeyEvent>
 
-#define LIST_ITEM_DATA_FROM 0
-#define LIST_ITEM_DATA_TO 1
+#define LIST_ITEM_DATA_FROM 1000
+#define LIST_ITEM_DATA_TO 1001
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cuttingListWidget->setDisabled(true);
 
     ui->removePageRangeButton->setDisabled(true);
+
+    ui->statusBar->showMessage(tr("Open een PDF-bestand om te knippen"));
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +58,8 @@ void MainWindow::on_choosePDFFile_clicked()
         ui->deleteAllPageRangeButton->setEnabled(true);
         ui->cuttingListLabel->setEnabled(true);
         ui->cuttingListWidget->setEnabled(true);
+
+        ui->statusBar->showMessage(tr("Nieuw PDF-bestand geopend"));
     }
 /*
     DO NOT put an "else". Imagine the scenario that the user has selected a PDF file to cut, than accidentally presses "Open File" again and presses "CANCEL" to correct his error.
@@ -95,10 +99,11 @@ void MainWindow::on_addPageRangeButton_clicked()
         QListWidgetItem *newrange = new QListWidgetItem();
         newrange->setData( LIST_ITEM_DATA_FROM ,van);
         newrange->setData( LIST_ITEM_DATA_TO   ,tot);
-//        newrange->setText(tr("van pagina ")+van+tr(" tot en met ")+tot);
-        newrange->setText("A"+van+"-"+tot);
+        newrange->setText(tr("van pagina ")+van+tr(" tot en met ")+tot);
+//        newrange->setText("A"+van+"-"+tot);
         ui->cuttingListWidget->addItem(newrange);
         ui->cuttingListWidget->sortItems(); // sorteren? Kan misschien problemen geven met 1, 10, 100...
+        ui->statusBar->showMessage(tr("Nieuw paginabereik toegevoegd."));
     }
 
 }
@@ -121,6 +126,16 @@ void MainWindow::on_startCuttingProcessButton_clicked()
     }
     else
     {
+        // disable all buttons to make clear cutting has started. (add status bar?)
+        ui->addPageRangeButton->setDisabled(true);
+        ui->startCuttingProcessButton->setDisabled(true);
+        ui->deleteAllPageRangeButton->setDisabled(true);
+        ui->cuttingListLabel->setDisabled(true);
+        ui->cuttingListWidget->setDisabled(true);
+        ui->statusBar->showMessage(tr("Bezig met knippen van ")+ui->PDFFileNameLabel->text());
+
+        ui->removePageRangeButton->setDisabled(true);
+
         int teller = 1000; // <vvim> quick & dirty to avoid trouble with 1, 10, 100, ...
 
         while(ui->cuttingListWidget->count()>0)
@@ -128,13 +143,13 @@ void MainWindow::on_startCuttingProcessButton_clicked()
             // voor elk item in de lijst, doe: pdftk A=LABEL cat ITEM output hoofdstuk-TELLER.pdf
 
             QListWidgetItem *temporary_item = ui->cuttingListWidget->takeItem(0);  // takeItem REMOVES and RETURNS, so no extra DELETE needed: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qlistwidget.html#takeItem
-//            QString pageranges = "A" + temporary_item->data( LIST_ITEM_DATA_FROM ).toString() + "-" + temporary_item->data( LIST_ITEM_DATA_TO ).toString();
-            QString pageranges = temporary_item->text();
+            QString pageranges = "A" + temporary_item->data( LIST_ITEM_DATA_FROM ).toString() + "-" + temporary_item->data( LIST_ITEM_DATA_TO ).toString();
+
             ///////
             QString t; t = t.setNum(teller);
 
             QProcess *proc = new QProcess();
-            QString program = "pdftk";
+            QString program = "echo"; //"pdftk";
 
             QStringList arguments;
             arguments << "A="+ui->PDFFileNameLabel->text(); // escaping not necessary, QProcess does that
@@ -144,9 +159,13 @@ void MainWindow::on_startCuttingProcessButton_clicked()
 
             teller++;
         }
+
         QString t; t = t.setNum(teller-1000);
+
+        ui->statusBar->showMessage(tr("Klaar, ")+t+tr(" hoofdstukken aangemaakt."));
+
         QMessageBox msgbox;
-        msgbox.setText(tr("Klaar, ")+t+tr(" hoofdstukken aantemaakt."));
+        msgbox.setText(tr("Klaar, ")+t+tr(" hoofdstukken aangemaakt."));
         msgbox.exec();
 
     }
@@ -157,6 +176,7 @@ void MainWindow::on_removePageRangeButton_clicked()
     qDeleteAll(ui->cuttingListWidget->selectedItems()); // see http://lists.trolltech.com/qt-interest/2007-09/thread00253-0.html
     ui->cuttingListWidget->clearSelection(); // don't show any selection (normally the selection shifts, I want it gone
     ui->removePageRangeButton->setDisabled(true);
+    ui->statusBar->showMessage(tr("Paginabereik verwijderd."));
 }
 
 void MainWindow::on_deleteAllPageRangeButton_clicked()
@@ -173,6 +193,7 @@ void MainWindow::on_deleteAllPageRangeButton_clicked()
     {
         ui->cuttingListWidget->clear();
         ui->removePageRangeButton->setDisabled(true);
+        ui->statusBar->showMessage(tr("Alle paginabereiken verwijderd."));
     }
 }
 
