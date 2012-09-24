@@ -199,8 +199,10 @@ void MainWindow::on_deleteAllPageRangeButton_clicked()
 
 void MainWindow::keyPressEvent( QKeyEvent *k )
 {
-    if(k->matches(QKeySequence::Delete))
+    if(k->key() == Qt::Key_Delete)
         on_removePageRangeButton_clicked();
     else if(k->matches(QKeySequence::Open))
         on_choosePDFFile_clicked();
+    else if (k->key() == Qt::Key_Insert)
+        on_addPageRangeButton_clicked();
 }
