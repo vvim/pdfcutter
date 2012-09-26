@@ -12,10 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    pagestocutdialog.cpp
+    pagestocutdialog.cpp \
+    pagerangelistwidgetitem.cpp
 
 HEADERS  += mainwindow.h \
-    pagestocutdialog.h
+    pagestocutdialog.h \
+    pagerangelistwidgetitem.h
 
 FORMS    += mainwindow.ui \
     pagestocutdialog.ui

@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "pagerangelistwidgetitem.h"
 #include "ui_mainwindow.h"
 #include "pagestocutdialog.h"
 #include "ui_pagestocutdialog.h"
@@ -79,10 +80,10 @@ void MainWindow::on_addPageRangeButton_clicked()
         // exec() is accepted, no click on the CANCEL button
         // if exec() is accepted, than the "CutFrom" and "CutTo" will also be > -1, so we do not have to check for that
         // if exec() is accepted, than the "CutFrom" and "CutTo" will also be within the acceptable page range, so we do not have to check for that
-        QString van;
-        van = van.setNum(pagestocut->getCutFrom());
-        QString tot;
-        tot = tot.setNum(pagestocut->getCutTo());
+        QString page_range_start;
+        page_range_start = page_range_start.setNum(pagestocut->getCutFrom());
+        QString page_range_end;
+        page_range_end = page_range_end.setNum(pagestocut->getCutTo());
 
         /*
         // <vvim> controleren of getallen niet >> aantal pagina's van PDF ! </vvim>
@@ -96,10 +97,10 @@ void MainWindow::on_addPageRangeButton_clicked()
 //        new QListWidgetItem("A"+van+"-"+tot, ui->cuttingListWidget); // <vvim> quick&dirty PDFTK-hack, maak onderscheid tussen ->text() en ->data()
         //new QListWidgetItem("bereik "+van+" - "+tot, ui->cuttingListWidget);
 
-        QListWidgetItem *newrange = new QListWidgetItem();
-        newrange->setData( LIST_ITEM_DATA_FROM ,van);
-        newrange->setData( LIST_ITEM_DATA_TO   ,tot);
-        newrange->setText(tr("van pagina ")+van+tr(" tot en met ")+tot);
+        PageRangeListWidgetItem *newrange = new PageRangeListWidgetItem();
+        newrange->setPageRangeStart(pagestocut->getCutFrom());
+        newrange->setPageRangeEnd(pagestocut->getCutTo());
+        newrange->setText(tr("van pagina ")+page_range_start+tr(" tot en met ")+page_range_end);
 //        newrange->setText("A"+van+"-"+tot);
         ui->cuttingListWidget->addItem(newrange);
         ui->cuttingListWidget->sortItems(); // sorteren? Kan misschien problemen geven met 1, 10, 100...
@@ -142,8 +143,8 @@ void MainWindow::on_startCuttingProcessButton_clicked()
         {
             // voor elk item in de lijst, doe: pdftk A=LABEL cat ITEM output hoofdstuk-TELLER.pdf
 
-            QListWidgetItem *temporary_item = ui->cuttingListWidget->takeItem(0);  // takeItem REMOVES and RETURNS, so no extra DELETE needed: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qlistwidget.html#takeItem
-            QString pageranges = "A" + temporary_item->data( LIST_ITEM_DATA_FROM ).toString() + "-" + temporary_item->data( LIST_ITEM_DATA_TO ).toString();
+            PageRangeListWidgetItem *temporary_item = (PageRangeListWidgetItem*) ui->cuttingListWidget->takeItem(0);  // takeItem REMOVES and RETURNS, so no extra DELETE needed: http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qlistwidget.html#takeItem
+            QString pageranges = temporary_item->getPDFtkPageRange(); // = "A" + temporary_item->data( LIST_ITEM_DATA_FROM ).toString() + "-" + temporary_item->data( LIST_ITEM_DATA_TO ).toString();
 
             ///////
             QString t; t = t.setNum(teller);
