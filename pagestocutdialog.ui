@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
-    <height>136</height>
+    <width>373</width>
+    <height>196</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>19</x>
      <y>10</y>
-     <width>251</width>
-     <height>81</height>
+     <width>181</width>
+     <height>61</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -30,6 +30,16 @@
      <widget class="QLabel" name="CutFromLabel">
       <property name="text">
        <string>Van pagina</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QSpinBox" name="CutFromSpinBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>9999</number>
       </property>
      </widget>
     </item>
@@ -50,29 +60,172 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QSpinBox" name="CutFromSpinBox">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>9999</number>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>100</y>
+     <x>190</x>
+     <y>160</y>
      <width>176</width>
      <height>27</height>
     </rect>
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ChapterNameLabel">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>80</y>
+     <width>115</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Bestandsnaam ingeven:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="NameBookTitle">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>100</y>
+     <width>141</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="NameStudentLevel">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>100</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="NameManualType">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>100</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="NameChapter">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>100</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="NamePageRange">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>100</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="NameBookTitleLabel">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>92</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="text">
+    <string>(titel van het boek)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="NameStudentLevelLabel">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>130</y>
+     <width>27</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="text">
+    <string>(klas)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="NameManualTypeLabel">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>130</y>
+     <width>34</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="text">
+    <string>(soort)</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="NameChapterLabel">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>130</y>
+     <width>9</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="text">
+    <string>()</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="NamePagerangeLabel">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>130</y>
+     <width>70</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="text">
+    <string>(paginabereik)</string>
    </property>
   </widget>
  </widget>

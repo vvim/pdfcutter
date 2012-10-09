@@ -61,3 +61,69 @@ void PagesToCutDialog::on_buttonBox_rejected()
 {
     this->reject();
 }
+
+
+void PagesToCutDialog::SetNameBookTitle(QString booktitle)
+{
+    ui->NameBookTitle->setText(booktitle);
+}
+
+QString PagesToCutDialog::GetNameBookTitle()
+{
+    return ui->NameBookTitle->text();
+}
+
+void PagesToCutDialog::SetNameStudentLevel(QString studentlevel)
+{
+    ui->NameStudentLevel->setText(studentlevel);
+}
+
+QString PagesToCutDialog::GetNameStudentLevel()
+{
+    return ui->NameStudentLevel->text();
+}
+
+void PagesToCutDialog::SetNameChapter(QString chapter)
+{
+    ui->NameChapter->setText(chapter);
+}
+
+QString PagesToCutDialog::GetNameChapter()
+{
+    return ui->NameChapter->text();
+}
+
+void PagesToCutDialog::SetNameManualType(QString manualtype)
+{
+    ui->NameManualType->setText(manualtype);
+}
+
+QString PagesToCutDialog::GetNameManualType()
+{
+    return ui->NameChapter->text();
+}
+
+void PagesToCutDialog::SetNamePagerange(int pagerange_start, int pagerange_end)
+{
+    ui->NamePageRange->setText("p0-0"); // ("p"+pagerange_start+"-"+pagerange_end);
+}
+
+int PagesToCutDialog::GetNamePagerangeStart()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+            return 0;
+}
+
+int PagesToCutDialog::GetNamePagerangeEnd()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+            return 0;
+}

@@ -9,6 +9,14 @@ namespace Ui {
     class PagesToCutDialog;
 }
 
+struct chapternaming {
+    QString booktitle;
+    QString studentlevel;
+    QString manualtype;
+    QString chapter;
+    int pagerange_start, pagerange_end;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +42,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    chapternaming namingsuggestions;
 };
 
 #endif // MAINWINDOW_H

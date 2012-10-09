@@ -70,11 +70,28 @@ void MainWindow::on_choosePDFFile_clicked()
         ui->PDFFileNameLabel->setText(tr("...geen PDF gekozen"));
     }
 */
+
+    // enter naming suggestions for the chapters
+    namingsuggestions.booktitle = "Joris";
+    namingsuggestions.studentlevel = "1";
+    namingsuggestions.chapter = "index";
+    namingsuggestions.manualtype = "LWB";
+    namingsuggestions.pagerange_start = 0;
+    namingsuggestions.pagerange_end = 0;
 }
 
 void MainWindow::on_addPageRangeButton_clicked()
 {
     PagesToCutDialog *pagestocut = new PagesToCutDialog();
+
+    // fill in the naming suggestions:
+    pagestocut->SetNameBookTitle(namingsuggestions.booktitle);
+    pagestocut->SetNameStudentLevel(namingsuggestions.studentlevel);
+    pagestocut->SetNameChapter(namingsuggestions.chapter);
+    pagestocut->SetNameManualType(namingsuggestions.manualtype);
+    pagestocut->SetNamePagerange(namingsuggestions.pagerange_start, namingsuggestions.pagerange_end);
+
+    // execute dialog
     if (pagestocut->exec())
     {
         // exec() is accepted, no click on the CANCEL button
@@ -105,6 +122,19 @@ void MainWindow::on_addPageRangeButton_clicked()
         ui->cuttingListWidget->addItem(newrange);
         ui->cuttingListWidget->sortItems(); // sorteren? Kan misschien problemen geven met 1, 10, 100...
         ui->statusBar->showMessage(tr("Nieuw paginabereik toegevoegd."));
+
+        namingsuggestions.booktitle = pagestocut->GetNameBookTitle();
+        namingsuggestions.studentlevel = pagestocut->GetNameStudentLevel();
+        namingsuggestions.chapter = pagestocut->GetNameChapter();
+        namingsuggestions.manualtype = pagestocut->GetNameManualType();
+        namingsuggestions.pagerange_start = pagestocut->GetNamePagerangeStart();
+        namingsuggestions.pagerange_end = pagestocut->GetNamePagerangeEnd();
+
+        // <vvim> namingsuggestions ook opslaan!!!!!
+
+        // <vvim> IF getnamechapter().IsInt() => suggestion == chapter++
+
+        // <vvim> namingsuggestions.pagerange_start = pagerange_end + 1!! (misschien ook de CutFrom aanpassen???)
     }
 
 }
@@ -137,7 +167,7 @@ void MainWindow::on_startCuttingProcessButton_clicked()
 
         ui->removePageRangeButton->setDisabled(true);
 
-        int teller = 1000; // <vvim> quick & dirty to avoid trouble with 1, 10, 100, ...
+        int teller = 1001; // <vvim> quick & dirty to avoid trouble with 1, 10, 100, ...
 
         while(ui->cuttingListWidget->count()>0)
         {
@@ -150,7 +180,7 @@ void MainWindow::on_startCuttingProcessButton_clicked()
             QString t; t = t.setNum(teller);
 
             QProcess *proc = new QProcess();
-            QString program = "echo"; //"pdftk";
+            QString program = "pdftk";
 
             QStringList arguments;
             arguments << "A="+ui->PDFFileNameLabel->text(); // escaping not necessary, QProcess does that
@@ -161,7 +191,7 @@ void MainWindow::on_startCuttingProcessButton_clicked()
             teller++;
         }
 
-        QString t; t = t.setNum(teller-1000);
+        QString t; t = t.setNum(teller-1001);
 
         ui->statusBar->showMessage(tr("Klaar, ")+t+tr(" hoofdstukken aangemaakt."));
 
