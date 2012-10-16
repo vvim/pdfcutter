@@ -6,6 +6,7 @@
 #define LIST_ITEM_DATA_END 1001
 
 #include <QListWidgetItem>
+#include "ChapterNaming.h"
 
 class PageRangeListWidgetItem : public QListWidgetItem
 {
@@ -19,8 +20,18 @@ public:
 
     QString getPDFtkPageRange(QString param = "A");
 
+    QString getNameBookTitle();
+    QString getNameStudentLevel();
+    QString getNameChapter();
+    QString getNameManualType();
+    int getNamePagerangeStart();
+    int getNamePagerangeEnd();
+
+    QString getChaptertoString();
+
     void setPageRangeStart(int pagerangestart);
     void setPageRangeEnd(int pagerangeend);
+    void setChapterNaming(chapternaming cn);
 
 private:
     virtual bool operator<(const QListWidgetItem &other) const{
@@ -30,6 +41,7 @@ private:
     }
 
     int start, end;
+    chapternaming chaptername;
 };
 
 #endif // PAGERANGELISTWIDGETITEM_H

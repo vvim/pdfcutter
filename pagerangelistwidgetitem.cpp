@@ -44,3 +44,53 @@ QString PageRangeListWidgetItem::getPDFtkPageRange(QString param)
 {
     return QString(param + getPageRangeStart_qstring() + "-" + getPageRangeEnd_qstring());
 }
+
+void PageRangeListWidgetItem::setChapterNaming(chapternaming cn)
+{
+    chaptername = cn;
+}
+
+QString PageRangeListWidgetItem::getNameBookTitle()
+{
+    return chaptername.booktitle;
+}
+
+QString PageRangeListWidgetItem::getNameStudentLevel()
+{
+    return chaptername.studentlevel;
+}
+
+QString PageRangeListWidgetItem::getNameChapter()
+{
+    return chaptername.chapter;
+}
+
+QString PageRangeListWidgetItem::getNameManualType()
+{
+    return chaptername.manualtype;
+}
+
+int PageRangeListWidgetItem::getNamePagerangeStart()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+            return 0;
+}
+
+int PageRangeListWidgetItem::getNamePagerangeEnd()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+            return 0;
+}
+
+QString PageRangeListWidgetItem::getChaptertoString()
+{
+    return chaptername.booktitle + " " + chaptername.studentlevel + " " + chaptername.manualtype + " " + chaptername.chapter + " " + chaptername.pagerange;
+}

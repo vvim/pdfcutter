@@ -18,21 +18,24 @@ public:
     int getCutFrom();
     int getCutTo();
 
-    void SetNameBookTitle(QString booktitle);
-    QString GetNameBookTitle();
+    void setNameBookTitle(QString booktitle);
+    QString getNameBookTitle();
 
-    void SetNameStudentLevel(QString studentlevel);
-    QString GetNameStudentLevel();
+    void setNameStudentLevel(QString studentlevel);
+    QString getNameStudentLevel();
 
-    void SetNameChapter(QString chapter);
-    QString GetNameChapter();
+    void setNameChapter(QString chapter);
+    QString getNameChapter();
 
-    void SetNameManualType(QString manualtype);
-    QString GetNameManualType();
+    void setNameManualType(QString manualtype);
+    QString getNameManualType();
 
-    void SetNamePagerange(int pagerange_start, int pagerange_end);
-    int GetNamePagerangeStart();
-    int GetNamePagerangeEnd();
+    void setNamePagerange(int pagerange_start, int pagerange_end);
+    void setNamePagerange(QString pagerange);
+    QString getNamePagerange();
+
+    int getNamePagerangeStart();
+    int getNamePagerangeEnd();
 
 private slots:
     void on_buttonBox_accepted();

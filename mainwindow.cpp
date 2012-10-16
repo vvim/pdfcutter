@@ -10,6 +10,7 @@
 #include <QListWidgetItem>
 #include <QKeyEvent>
 
+
 #define LIST_ITEM_DATA_FROM 1000
 #define LIST_ITEM_DATA_TO 1001
 
@@ -52,6 +53,7 @@ void MainWindow::on_choosePDFFile_clicked()
     // change label if PDF file was chosen
     if(fileName != NULL)
     {
+        path_to_PDF = QFileInfo(fileName).absoluteDir();
         ui->PDFFileNameLabel->setText(fileName);
         // now we can also enable the functionality of the addPageRangeButton and the startCuttingProcessButton (without a PDF file, they are useless)
         ui->addPageRangeButton->setEnabled(true);
@@ -76,6 +78,7 @@ void MainWindow::on_choosePDFFile_clicked()
     namingsuggestions.studentlevel = "1";
     namingsuggestions.chapter = "index";
     namingsuggestions.manualtype = "LWB";
+    namingsuggestions.pagerange = "p1-2";
     namingsuggestions.pagerange_start = 0;
     namingsuggestions.pagerange_end = 0;
 }
@@ -85,11 +88,12 @@ void MainWindow::on_addPageRangeButton_clicked()
     PagesToCutDialog *pagestocut = new PagesToCutDialog();
 
     // fill in the naming suggestions:
-    pagestocut->SetNameBookTitle(namingsuggestions.booktitle);
-    pagestocut->SetNameStudentLevel(namingsuggestions.studentlevel);
-    pagestocut->SetNameChapter(namingsuggestions.chapter);
-    pagestocut->SetNameManualType(namingsuggestions.manualtype);
-    pagestocut->SetNamePagerange(namingsuggestions.pagerange_start, namingsuggestions.pagerange_end);
+    pagestocut->setNameBookTitle(namingsuggestions.booktitle);
+    pagestocut->setNameStudentLevel(namingsuggestions.studentlevel);
+    pagestocut->setNameChapter(namingsuggestions.chapter);
+    pagestocut->setNameManualType(namingsuggestions.manualtype);
+    //pagestocut->setNamePagerange(namingsuggestions.pagerange_start, namingsuggestions.pagerange_end);
+    pagestocut->setNamePagerange(namingsuggestions.pagerange);
 
     // execute dialog
     if (pagestocut->exec())
@@ -109,32 +113,32 @@ void MainWindow::on_addPageRangeButton_clicked()
         }
         */
 
+        //Copy the chapternaming info from the dialogbox to the variable 'namingsuggestions' so that similar suggestions will be given the next time that the dialog box is called
+        namingsuggestions.booktitle = pagestocut->getNameBookTitle();
+        namingsuggestions.studentlevel = pagestocut->getNameStudentLevel();
+        namingsuggestions.chapter = pagestocut->getNameChapter();
+        namingsuggestions.manualtype = pagestocut->getNameManualType();
+        namingsuggestions.pagerange = pagestocut->getNamePagerange();
+        namingsuggestions.pagerange_start = pagestocut->getNamePagerangeStart();
+        namingsuggestions.pagerange_end = pagestocut->getNamePagerangeEnd();
 
         //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
-//        new QListWidgetItem("A"+van+"-"+tot, ui->cuttingListWidget); // <vvim> quick&dirty PDFTK-hack, maak onderscheid tussen ->text() en ->data()
-        //new QListWidgetItem("bereik "+van+" - "+tot, ui->cuttingListWidget);
-
         PageRangeListWidgetItem *newrange = new PageRangeListWidgetItem();
         newrange->setPageRangeStart(pagestocut->getCutFrom());
         newrange->setPageRangeEnd(pagestocut->getCutTo());
-        newrange->setText(tr("van pagina ")+page_range_start+tr(" tot en met ")+page_range_end);
-//        newrange->setText("A"+van+"-"+tot);
+        newrange->setChapterNaming(namingsuggestions);
+        newrange->setText("["+page_range_start+"-"+page_range_end+"] "+newrange->getChaptertoString());
         ui->cuttingListWidget->addItem(newrange);
         ui->cuttingListWidget->sortItems(); // sorteren? Kan misschien problemen geven met 1, 10, 100...
         ui->statusBar->showMessage(tr("Nieuw paginabereik toegevoegd."));
 
-        namingsuggestions.booktitle = pagestocut->GetNameBookTitle();
-        namingsuggestions.studentlevel = pagestocut->GetNameStudentLevel();
-        namingsuggestions.chapter = pagestocut->GetNameChapter();
-        namingsuggestions.manualtype = pagestocut->GetNameManualType();
-        namingsuggestions.pagerange_start = pagestocut->GetNamePagerangeStart();
-        namingsuggestions.pagerange_end = pagestocut->GetNamePagerangeEnd();
-
-        // <vvim> namingsuggestions ook opslaan!!!!!
-
         // <vvim> IF getnamechapter().IsInt() => suggestion == chapter++
 
         // <vvim> namingsuggestions.pagerange_start = pagerange_end + 1!! (misschien ook de CutFrom aanpassen???)
+        namingsuggestions.pagerange_start = namingsuggestions.pagerange_end + 1;
+
+        int average_chapter_length = 10;
+        namingsuggestions.pagerange_end = namingsuggestions.pagerange_start + average_chapter_length;
     }
 
 }
@@ -184,7 +188,7 @@ void MainWindow::on_startCuttingProcessButton_clicked()
 
             QStringList arguments;
             arguments << "A="+ui->PDFFileNameLabel->text(); // escaping not necessary, QProcess does that
-            arguments << "cat" << pageranges << "output" << ui->PDFFileNameLabel->text()+tr("hoofdstuk-")+t+".pdf";
+            arguments << "cat" << pageranges << "output" << path_to_PDF.absolutePath() + "/" + temporary_item->getChaptertoString()+".pdf";
 
             proc->execute(program, arguments);
 
