@@ -3,19 +3,13 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include <QDir>
+#include "ChapterNaming.h"
 
 namespace Ui {
     class MainWindow;
     class PagesToCutDialog;
 }
-
-struct chapternaming {
-    QString booktitle;
-    QString studentlevel;
-    QString manualtype;
-    QString chapter;
-    int pagerange_start, pagerange_end;
-};
 
 class MainWindow : public QMainWindow
 {
@@ -43,6 +37,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     chapternaming namingsuggestions;
+    QDir path_to_PDF;
 };
 
 #endif // MAINWINDOW_H
