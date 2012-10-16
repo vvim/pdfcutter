@@ -63,60 +63,52 @@ void PagesToCutDialog::on_buttonBox_rejected()
 }
 
 
-void PagesToCutDialog::setNameBookTitle(QString booktitle)
+void PagesToCutDialog::SetNameBookTitle(QString booktitle)
 {
     ui->NameBookTitle->setText(booktitle);
 }
 
-QString PagesToCutDialog::getNameBookTitle()
+QString PagesToCutDialog::GetNameBookTitle()
 {
     return ui->NameBookTitle->text();
 }
 
-void PagesToCutDialog::setNameStudentLevel(QString studentlevel)
+void PagesToCutDialog::SetNameStudentLevel(QString studentlevel)
 {
     ui->NameStudentLevel->setText(studentlevel);
 }
 
-QString PagesToCutDialog::getNameStudentLevel()
+QString PagesToCutDialog::GetNameStudentLevel()
 {
     return ui->NameStudentLevel->text();
 }
 
-void PagesToCutDialog::setNameChapter(QString chapter)
+void PagesToCutDialog::SetNameChapter(QString chapter)
 {
     ui->NameChapter->setText(chapter);
 }
 
-QString PagesToCutDialog::getNameChapter()
+QString PagesToCutDialog::GetNameChapter()
 {
     return ui->NameChapter->text();
 }
 
-void PagesToCutDialog::setNameManualType(QString manualtype)
+void PagesToCutDialog::SetNameManualType(QString manualtype)
 {
     ui->NameManualType->setText(manualtype);
 }
 
-QString PagesToCutDialog::getNameManualType()
+QString PagesToCutDialog::GetNameManualType()
 {
-    return ui->NameManualType->text();
+    return ui->NameChapter->text();
 }
 
-void PagesToCutDialog::setNamePagerange(int pagerange_start, int pagerange_end)
+void PagesToCutDialog::SetNamePagerange(int pagerange_start, int pagerange_end)
 {
-    QString temporary_string;
-    temporary_string = "p";
-    temporary_string = temporary_string+pagerange_start+"-"+pagerange_end;
-    ui->NamePageRange->setText(temporary_string);
+    ui->NamePageRange->setText("p0-0"); // ("p"+pagerange_start+"-"+pagerange_end);
 }
 
-void PagesToCutDialog::setNamePagerange(QString pagerange)
-{
-    ui->NamePageRange->setText(pagerange);
-}
-
-int PagesToCutDialog::getNamePagerangeStart()
+int PagesToCutDialog::GetNamePagerangeStart()
 {
     /*
     if ui->NamePageRange->text() is of the type p<int>-<int>
@@ -126,12 +118,7 @@ int PagesToCutDialog::getNamePagerangeStart()
             return 0;
 }
 
-QString PagesToCutDialog::getNamePagerange()
-{
-    return ui->NamePageRange->text();
-}
-
-int PagesToCutDialog::getNamePagerangeEnd()
+int PagesToCutDialog::GetNamePagerangeEnd()
 {
     /*
     if ui->NamePageRange->text() is of the type p<int>-<int>

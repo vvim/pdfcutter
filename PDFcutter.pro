@@ -17,8 +17,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     pagestocutdialog.h \
-    pagerangelistwidgetitem.h \
-    ChapterNaming.h
+    pagerangelistwidgetitem.h
 
 FORMS    += mainwindow.ui \
     pagestocutdialog.ui
