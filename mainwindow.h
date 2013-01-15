@@ -34,6 +34,10 @@ private slots:
 
     void keyPressEvent( QKeyEvent *k );
 
+    void on_editPageRangeButton_clicked();
+
+    void on_cuttingListWidget_itemDoubleClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
     chapternaming namingsuggestions;

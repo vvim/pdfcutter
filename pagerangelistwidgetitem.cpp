@@ -70,24 +70,29 @@ QString PageRangeListWidgetItem::getNameManualType()
     return chaptername.manualtype;
 }
 
-int PageRangeListWidgetItem::getNamePagerangeStart()
+QString PageRangeListWidgetItem::getNamePagerange()
 {
-    /*
-    if ui->NamePageRange->text() is of the type p<int>-<int>
-            return <int>
-    else
-    */
-            return 0;
+    return chaptername.pagerange;
 }
 
-int PageRangeListWidgetItem::getNamePagerangeEnd()
+int PageRangeListWidgetItem::getPagerangeStart()
 {
     /*
     if ui->NamePageRange->text() is of the type p<int>-<int>
             return <int>
     else
     */
-            return 0;
+    return chaptername.pagerange_start;
+}
+
+int PageRangeListWidgetItem::getPagerangeEnd()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+    return chaptername.pagerange_end;
 }
 
 QString PageRangeListWidgetItem::getChaptertoString()

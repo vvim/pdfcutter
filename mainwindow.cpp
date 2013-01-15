@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include <QKeyEvent>
+#include <QDebug>
 
 
 #define LIST_ITEM_DATA_FROM 1000
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cuttingListWidget->setDisabled(true);
 
     ui->removePageRangeButton->setDisabled(true);
+    ui->editPageRangeButton->setDisabled(true);
 
     ui->statusBar->showMessage(tr("Open een PDF-bestand om te knippen"));
 }
@@ -79,8 +81,8 @@ void MainWindow::on_choosePDFFile_clicked()
     namingsuggestions.chapter = "index";
     namingsuggestions.manualtype = "LWB";
     namingsuggestions.pagerange = "p1-2";
-    namingsuggestions.pagerange_start = 0;
-    namingsuggestions.pagerange_end = 0;
+    namingsuggestions.pagerange_start = 1;
+    namingsuggestions.pagerange_end = 2;
 }
 
 void MainWindow::on_addPageRangeButton_clicked()
@@ -94,6 +96,11 @@ void MainWindow::on_addPageRangeButton_clicked()
     pagestocut->setNameManualType(namingsuggestions.manualtype);
     //pagestocut->setNamePagerange(namingsuggestions.pagerange_start, namingsuggestions.pagerange_end);
     pagestocut->setNamePagerange(namingsuggestions.pagerange);
+
+    // the suggestion to cut
+    pagestocut->setPagerange(namingsuggestions.pagerange_start, namingsuggestions.pagerange_end);
+
+    qDebug() << "namingsuggestions.pagerange_start/end" << namingsuggestions.pagerange;
 
     // execute dialog
     if (pagestocut->exec())
@@ -119,8 +126,9 @@ void MainWindow::on_addPageRangeButton_clicked()
         namingsuggestions.chapter = pagestocut->getNameChapter();
         namingsuggestions.manualtype = pagestocut->getNameManualType();
         namingsuggestions.pagerange = pagestocut->getNamePagerange();
-        namingsuggestions.pagerange_start = pagestocut->getNamePagerangeStart();
-        namingsuggestions.pagerange_end = pagestocut->getNamePagerangeEnd();
+        namingsuggestions.pagerange_start = pagestocut->getPagerangeStart();
+        namingsuggestions.pagerange_end = pagestocut->getPagerangeEnd();
+        qDebug() << "..namingsuggestions.pagerange_start/end" << namingsuggestions.pagerange;
 
         //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
         PageRangeListWidgetItem *newrange = new PageRangeListWidgetItem();
@@ -135,10 +143,13 @@ void MainWindow::on_addPageRangeButton_clicked()
         // <vvim> IF getnamechapter().IsInt() => suggestion == chapter++
 
         // <vvim> namingsuggestions.pagerange_start = pagerange_end + 1!! (misschien ook de CutFrom aanpassen???)
+        // TODO: until the end of the book???
         namingsuggestions.pagerange_start = namingsuggestions.pagerange_end + 1;
 
-        int average_chapter_length = 10;
+        int average_chapter_length = 1;
         namingsuggestions.pagerange_end = namingsuggestions.pagerange_start + average_chapter_length;
+        namingsuggestions.pagerange.sprintf("p%d-%d",namingsuggestions.pagerange_start,namingsuggestions.pagerange_end);
+        qDebug() << "....namingsuggestions.pagerange_start/end" << namingsuggestions.pagerange;
     }
 
 }
@@ -147,6 +158,7 @@ void MainWindow::on_cuttingListWidget_itemClicked(QListWidgetItem *item)
 {
     // item selected,removal has to be possible
     ui->removePageRangeButton->setEnabled(true);
+    ui->editPageRangeButton->setEnabled(true);
 }
 
 void MainWindow::on_startCuttingProcessButton_clicked()
@@ -170,10 +182,12 @@ void MainWindow::on_startCuttingProcessButton_clicked()
         ui->statusBar->showMessage(tr("Bezig met knippen van ")+ui->PDFFileNameLabel->text());
 
         ui->removePageRangeButton->setDisabled(true);
+        ui->editPageRangeButton->setDisabled(true);
+
 
         int teller = 1001; // <vvim> quick & dirty to avoid trouble with 1, 10, 100, ...
 
-        while(ui->cuttingListWidget->count()>0)
+        while(ui->cuttingListWidget->count() > 0)
         {
             // voor elk item in de lijst, doe: pdftk A=LABEL cat ITEM output hoofdstuk-TELLER.pdf
 
@@ -211,6 +225,7 @@ void MainWindow::on_removePageRangeButton_clicked()
     qDeleteAll(ui->cuttingListWidget->selectedItems()); // see http://lists.trolltech.com/qt-interest/2007-09/thread00253-0.html
     ui->cuttingListWidget->clearSelection(); // don't show any selection (normally the selection shifts, I want it gone
     ui->removePageRangeButton->setDisabled(true);
+    ui->editPageRangeButton->setDisabled(true);
     ui->statusBar->showMessage(tr("Paginabereik verwijderd."));
 }
 
@@ -228,6 +243,7 @@ void MainWindow::on_deleteAllPageRangeButton_clicked()
     {
         ui->cuttingListWidget->clear();
         ui->removePageRangeButton->setDisabled(true);
+        ui->editPageRangeButton->setDisabled(true);
         ui->statusBar->showMessage(tr("Alle paginabereiken verwijderd."));
     }
 }
@@ -240,4 +256,74 @@ void MainWindow::keyPressEvent( QKeyEvent *k )
         on_choosePDFFile_clicked();
     else if (k->key() == Qt::Key_Insert)
         on_addPageRangeButton_clicked();
+}
+
+void MainWindow::on_editPageRangeButton_clicked()
+{
+    // TODO: testen of er wel een item geselecteerd is, anders: CRASH
+    PageRangeListWidgetItem *temporary_item = (PageRangeListWidgetItem*) ui->cuttingListWidget->selectedItems().first();
+
+    PagesToCutDialog *pagestocut = new PagesToCutDialog();
+    pagestocut->setPagerange(temporary_item->getPageRangeStart_int(),temporary_item->getPageRangeEnd_int());
+
+    // copy the info from the selected item:
+    pagestocut->setNameBookTitle(temporary_item->getNameBookTitle());
+    pagestocut->setNameStudentLevel(temporary_item->getNameStudentLevel());
+    pagestocut->setNameChapter(temporary_item->getNameChapter());
+    pagestocut->setNameManualType(temporary_item->getNameManualType());
+    pagestocut->setNamePagerange(temporary_item->getNamePagerange());
+    //(temporary_item->getPageRangeStart_int(),temporary_item->getPageRangeEnd_int());
+
+
+    // execute dialog
+    if (pagestocut->exec())
+    {
+        // exec() is accepted, no click on the CANCEL button
+        // if exec() is accepted, than the "CutFrom" and "CutTo" will also be > -1, so we do not have to check for that
+        // if exec() is accepted, than the "CutFrom" and "CutTo" will also be within the acceptable page range, so we do not have to check for that
+        QString page_range_start;
+        page_range_start = page_range_start.setNum(pagestocut->getCutFrom());
+        QString page_range_end;
+        page_range_end = page_range_end.setNum(pagestocut->getCutTo());
+
+        /*
+        // <vvim> controleren of getallen niet >> aantal pagina's van PDF ! </vvim>
+        if ((cutTo > MaximumPaginas) || (cutFrom > MaximumPaginas))
+        {
+        }
+        */
+
+        //Copy the chapternaming info from the dialogbox to the temporary variable 'naming' so that it can be saved for cutting (WITHOUT changing the "namingsuggestions"-variable
+        chapternaming naming;
+        naming.booktitle = pagestocut->getNameBookTitle();
+        naming.studentlevel = pagestocut->getNameStudentLevel();
+        naming.chapter = pagestocut->getNameChapter();
+        naming.manualtype = pagestocut->getNameManualType();
+        naming.pagerange = pagestocut->getNamePagerange();
+        naming.pagerange_start = pagestocut->getNamePagerangeStart();
+        naming.pagerange_end = pagestocut->getNamePagerangeEnd();
+
+        //Remove selected item and replace with the edited one
+        on_removePageRangeButton_clicked();
+
+        //List items can be inserted automatically into a list, when they are constructed, by specifying the list widget: http://qt-project.org/doc/qt-4.8/qlistwidgetitem.html
+        PageRangeListWidgetItem *newrange = new PageRangeListWidgetItem();
+        newrange->setPageRangeStart(pagestocut->getCutFrom());
+        newrange->setPageRangeEnd(pagestocut->getCutTo());
+        newrange->setChapterNaming(naming);
+        newrange->setText("["+page_range_start+"-"+page_range_end+"] "+newrange->getChaptertoString());
+        ui->cuttingListWidget->addItem(newrange);
+        ui->cuttingListWidget->sortItems(); // sorteren? Kan misschien problemen geven met 1, 10, 100...
+
+        ui->cuttingListWidget->clearSelection(); // don't show any selection (normally the selection shifts, I want it gone
+        ui->removePageRangeButton->setDisabled(true);
+        ui->editPageRangeButton->setDisabled(true);
+
+        ui->statusBar->showMessage(tr("Paginabereik aangepast."));
+    }
+}
+
+void MainWindow::on_cuttingListWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    on_editPageRangeButton_clicked();
 }

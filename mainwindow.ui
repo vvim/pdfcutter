@@ -115,6 +115,19 @@
      <string>Paginabereik:</string>
     </property>
    </widget>
+   <widget class="QToolButton" name="editPageRangeButton">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>150</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Bereik aanpassen</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

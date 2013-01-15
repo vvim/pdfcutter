@@ -24,8 +24,9 @@ public:
     QString getNameStudentLevel();
     QString getNameChapter();
     QString getNameManualType();
-    int getNamePagerangeStart();
-    int getNamePagerangeEnd();
+    int getPagerangeStart();
+    int getPagerangeEnd();
+    QString getNamePagerange();
 
     QString getChaptertoString();
 

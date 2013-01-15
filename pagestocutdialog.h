@@ -34,8 +34,11 @@ public:
     void setNamePagerange(QString pagerange);
     QString getNamePagerange();
 
+    void setPagerange(int pagerangestart, int pagerangeend);
     int getNamePagerangeStart();
     int getNamePagerangeEnd();
+    int getPagerangeStart();
+    int getPagerangeEnd();
 
 private slots:
     void on_buttonBox_accepted();

@@ -1,6 +1,7 @@
 #include <QMessageBox>
 #include "pagestocutdialog.h"
 #include "ui_pagestocutdialog.h"
+#include <QDebug>
 
 PagesToCutDialog::PagesToCutDialog(QWidget *parent) :
     QDialog(parent),
@@ -8,6 +9,12 @@ PagesToCutDialog::PagesToCutDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     inputValidated = false;
+}
+
+void PagesToCutDialog::setPagerange(int pagerangestart, int pagerangeend)
+{
+    ui->CutFromSpinBox->setValue(pagerangestart);
+    ui->CutToSpinBox->setValue(pagerangeend);
 }
 
 PagesToCutDialog::~PagesToCutDialog()
@@ -106,8 +113,8 @@ QString PagesToCutDialog::getNameManualType()
 void PagesToCutDialog::setNamePagerange(int pagerange_start, int pagerange_end)
 {
     QString temporary_string;
-    temporary_string = "p";
-    temporary_string = temporary_string+pagerange_start+"-"+pagerange_end;
+    temporary_string.sprintf("p%d-%d",pagerange_start,pagerange_end);
+
     ui->NamePageRange->setText(temporary_string);
 }
 
@@ -123,7 +130,7 @@ int PagesToCutDialog::getNamePagerangeStart()
             return <int>
     else
     */
-            return 0;
+            return ui->CutFromSpinBox->value();
 }
 
 QString PagesToCutDialog::getNamePagerange()
@@ -138,5 +145,25 @@ int PagesToCutDialog::getNamePagerangeEnd()
             return <int>
     else
     */
-            return 0;
+            return ui->CutToSpinBox->value();
+}
+
+int PagesToCutDialog::getPagerangeStart()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+            return ui->CutFromSpinBox->value();
+}
+
+int PagesToCutDialog::getPagerangeEnd()
+{
+    /*
+    if ui->NamePageRange->text() is of the type p<int>-<int>
+            return <int>
+    else
+    */
+            return ui->CutToSpinBox->value();
 }
